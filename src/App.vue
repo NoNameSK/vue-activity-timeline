@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="main-container">
         <contributions-chart @year-changed="handleYearChanged"></contributions-chart>
     </div>
 </template>
@@ -34,5 +34,10 @@ export default {
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+}
+
+.main-container {
+    display: grid;
+    place-items: center;
 }
 </style>

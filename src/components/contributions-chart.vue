@@ -1,35 +1,43 @@
 <template>
     <div class="contributions-chart">
+        <div>
+            <div class="total-contributions">
+                Total contributions: {{ totalContributions }}
+            </div>
+            <div class="chart">
+                <div class="month" v-for="(month, index) in monthLabels" :key="index"
+                     :style="{ gridColumn: index * 4 + 2 }">{{ month.name }}
+                </div>
+                <div class="day-label" v-for="(day, index) in filteredDayLabels" :key="index"
+                     :style="{ gridRow: index * 2 + 2 }">{{ day }}
+                </div>
+                <div
+                        v-for="(day, index) in contributions"
+                        :key="index"
+                        :class="['day', getContributionClass(day)]"
+                        :style="{
+                          gridRow: getDayGridRow(day.date),
+                          gridColumn: getDayGridColumn(day.date) + 1
+                        }"
+                        :title="day.title"
+                ></div>
+            </div>
+            <div class="legend">
+                <div class="legend-label">Less</div>
+                <div class="legend-item" v-for="(item, index) in legendItems" :key="index">
+                    <div class="legend-color" :class="item.class"></div>
+                    <div class="legend-label">{{ item.label }}</div>
+                </div>
+                <div class="legend-label">More</div>
+            </div>
+        </div>
+
         <div class="year-selector">
-            <a-radio-group :value="selectedYear" @input="handleYearInput">
-                <a-radio-button v-for="year in years" :key="year" :value="year">
+            <a-radio-group class="year-selector-container" :value="selectedYear" @input="handleYearInput" button-style="solid">
+                <a-radio-button v-for="year in years" :key="year" :value="year" style="display: block;">
                     {{ year }}
                 </a-radio-button>
             </a-radio-group>
-        </div>
-        <div class="chart">
-            <div class="month" v-for="(month, index) in monthLabels" :key="index"
-                 :style="{ gridColumn: index * 4 + 2 }">{{ month.name }}
-            </div>
-            <div class="day-label" v-for="(day, index) in filteredDayLabels" :key="index"
-                 :style="{ gridRow: index * 2 + 2 }">{{ day }}
-            </div>
-            <div
-                    v-for="(day, index) in contributions"
-                    :key="index"
-                    :class="['day', getContributionClass(day)]"
-                    :style="{
-          gridRow: getDayGridRow(day.date),
-          gridColumn: getDayGridColumn(day.date) + 1
-        }"
-                    :title="day.title"
-            ></div>
-        </div>
-        <div class="legend">
-            <div class="legend-item" v-for="(item, index) in legendItems" :key="index">
-                <div class="legend-color" :class="item.class"></div>
-                <div class="legend-label">{{ item.label }}</div>
-            </div>
         </div>
     </div>
 </template>
@@ -52,6 +60,9 @@ export default {
 		};
 	},
 	computed: {
+		totalContributions() {
+			return this.contributions.reduce((sum, day) => sum + day.contributions, 0);
+		},
 		filteredDayLabels() {
 			return ["Mon", "Wed", "Fri"];
 		},
@@ -73,11 +84,11 @@ export default {
 		},
 		legendItems() {
 			return [
-				{class: "no-contributions", label: "Less"},
+				{class: "no-contributions", label: ""},
 				{class: "few-contributions", label: ""},
 				{class: "some-contributions", label: ""},
 				{class: "many-contributions", label: ""},
-				{class: "max-contributions", label: "More"},
+				{class: "max-contributions", label: ""},
 			];
 		},
 	},
@@ -116,7 +127,6 @@ export default {
 		},
 		changeYear() {
 			this.fetchData();
-			console.log(this.selectedYear)
 			this.$emit('yearChanged', this.selectedYear);
 		},
 		getContributionClass(day) {
@@ -157,9 +167,31 @@ export default {
 
 
 <style>
-.contributions-chart {
+.ant-radio-button-wrapper:before {
+    display: none;
+}
+
+.year-selector .ant-radio-button-wrapper {
+    border: none;
+    margin-right: 10vh;
+}
+.year-selector-container {
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    justify-content: center;
+    margin-bottom: 16px;
+}
+
+.total-contributions {
+    margin-left: 16px;
+    font-weight: bold;
+}
+
+.contributions-chart {
+    gap: 5vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
 }
 
