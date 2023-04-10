@@ -1,16 +1,19 @@
 <template>
     <div class="main-container">
         <contributions-chart @year-changed="handleYearChanged"></contributions-chart>
+        <contribution-activity />
     </div>
 </template>
 
 <script>
 
 import ContributionsChart from "@/components/contributions-chart.vue";
+import ContributionActivity from "@/components/contribution-activity.vue";
 
 export default {
 	name: 'App',
 	components: {
+      ContributionActivity,
 		ContributionsChart,
 	},
 	methods: {
