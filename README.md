@@ -21,3 +21,5 @@ npm run lint
 ```
 
 ### NODE VERSION v16.18.0
+
+[Deploy in github pages](https://nonamesk.github.io/vue-activity-timeline/)
