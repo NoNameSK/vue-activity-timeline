@@ -21,3 +21,8 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+.idea/vue-activity-timeline.iml
+.idea/vcs.xml
+.idea/php.xml
+.idea/modules.xml
+.idea/jsLinters/eslint.xml
